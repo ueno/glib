@@ -62,6 +62,9 @@ typedef struct _GPermission                   GPermission;
 typedef struct _GMenuModel                    GMenuModel;
 typedef struct _GNotification                 GNotification;
 
+typedef struct _GInputMethod                  GInputMethod;
+typedef struct _GInputMethodEngine            GInputMethodEngine;
+
 /**
  * GDrive:
  *

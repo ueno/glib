@@ -1,0 +1,40 @@
+<!DOCTYPE node PUBLIC
+"-//freedesktop//DTD D-BUS Object Introspection 1.0//EN"
+"http://www.freedesktop.org/standards/dbus/1.0/introspect.dtd" >
+<node>
+  <interface name='org.freedesktop.InputMethod'>
+    <method name='GetAddress'>
+      <arg type='s' name='address' direction='out'/>
+    </method>
+    <method name='CreateEngine'>
+      <arg type='o' name='object_path' direction='out'/>
+      <arg type='a{sv}' name='platform_data' direction='in'/>
+    </method>
+  </interface>
+  <interface name='org.freedesktop.InputMethod.Engine'>
+    <method name='KeyEvent'>
+      <arg type='u' name='keycode' direction='in'/>
+      <arg type='b' name='pressed' direction='in'/>
+      <arg type='b' name='handled' direction='out'/>
+    </method>
+    <method name='Focus'>
+      <arg type='b' name='focused'/>
+    </method>
+    <method name='Reset'/>
+    <method name='Destroy'/>
+    <signal name='Commit'>
+      <arg type='s' name='text'/>
+    </signal>
+    <signal name='PreeditChanged'>
+      <arg type='s' name='text'/>
+      <arg type='a(uuu)' name='styling'/>
+      <arg type='i' name='cursor_pos'/>
+    </signal>
+    <signal name='DeleteSurroundingText'>
+      <arg type='i' name='offset_from_cursor'/>
+      <arg type='u' name='nchars'/>
+    </signal>
+    <property name='SurroundingText' type='(suu)' access='write'/>
+    <property name='ContentType' type='(uu)' access='write'/>
+  </interface>
+</node>

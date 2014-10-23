@@ -77,6 +77,7 @@
 #include <gio/ginetaddressmask.h>
 #include <gio/ginetsocketaddress.h>
 #include <gio/ginitable.h>
+#include <gio/ginputmethod.h>
 #include <gio/ginputstream.h>
 #include <gio/gioenums.h>
 #include <gio/gioenumtypes.h>

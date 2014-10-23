@@ -100,6 +100,16 @@ gdbus-daemon-generated.h gdbus-daemon-generated.c: $(srcdir)/dbus-daemon.xml $(s
 		$(srcdir)/dbus-daemon.xml \
 		$(NULL)
 
+gdbus-inputmethod-generated.h gdbus-inputmethod-generated.c: $(srcdir)/inputmethod.xml $(srcdir)/gdbus-2.0/codegen/gdbus-codegen.in
+	$(AM_V_GEN) UNINSTALLED_GLIB_SRCDIR=$(top_srcdir) \
+		UNINSTALLED_GLIB_BUILDDIR=$(top_builddir) \
+		$(PYTHON) $(srcdir)/gdbus-2.0/codegen/gdbus-codegen.in \
+		--interface-prefix org. \
+		--generate-c-code gdbus-inputmethod-generated \
+		--c-namespace _G \
+		$(srcdir)/inputmethod.xml \
+		$(NULL)
+
 settings_headers = \
 	gsettingsbackend.h		\
 	gsettingsschema.h		\
@@ -180,6 +190,16 @@ application_sources = \
 	gnotificationbackend.h			\
 	gnotification.c				\
 	gnotificationbackend.c			\
+	$(NULL)
+
+inputmethod_headers =				\
+	ginputmethod.h				\
+	$(NULL)
+
+inputmethod_sources =				\
+	ginputmethod.c				\
+	gdbus-inputmethod-generated.h		\
+	gdbus-inputmethod-generated.c		\
 	$(NULL)
 
 local_sources = \
@@ -474,6 +494,7 @@ libgio_2_0_la_SOURCES =		\
 	$(unix_sources) 	\
 	$(win32_sources) 	\
 	$(application_sources) 	\
+	$(inputmethod_sources) 	\
 	$(settings_sources) 	\
 	$(gdbus_sources) 	\
 	$(local_sources) 	\
@@ -625,6 +646,7 @@ gio_headers =			\
 	gzlibcompressor.h	\
 	gzlibdecompressor.h	\
 	$(application_headers)	\
+	$(inputmethod_headers)	\
 	$(settings_headers)	\
 	$(gdbus_headers)	\
 	$(NULL)
@@ -645,6 +667,8 @@ BUILT_SOURCES += 		\
 	gioenumtypes.c		\
 	gdbus-daemon-generated.c \
 	gdbus-daemon-generated.h \
+	gdbus-inputmethod-generated.c \
+	gdbus-inputmethod-generated.h \
 	gnetworking.h		\
 	$(NULL)
 
@@ -666,7 +690,13 @@ BUILT_EXTRA_DIST += 		\
 gio-public-headers.txt: Makefile
 	$(AM_V_GEN) echo $(gioinclude_HEADERS) $(giowin32include_HEADERS) $(giounixinclude_HEADERS) > $@.tmp && mv $@.tmp $@
 
-CLEANFILES += gdbus-daemon-generated.c gdbus-daemon-generated.h gio-public-headers.txt gconstructor_as_data.h
+CLEANFILES +=					\
+	gdbus-daemon-generated.c		\
+	gdbus-daemon-generated.h		\
+	gdbus-inputmethod-generated.c		\
+	gdbus-inputmethod-generated.h		\
+	gio-public-headers.txt			\
+	gconstructor_as_data.h
 
 
 DISTCLEANFILES += 		\
