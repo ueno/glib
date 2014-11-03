@@ -411,43 +411,37 @@ on_handle_destroy (_GFreedesktopInputMethodEngine *object,
   return TRUE;
 }
 
-static void
-on_notify_surrounding_text (GObject    *object,
-                            GParamSpec *pspec,
-                            gpointer    user_data)
+static gboolean
+on_handle_set_surrounding_text (_GFreedesktopInputMethodEngine *object,
+                                GDBusMethodInvocation          *invocation,
+                                const gchar                    *arg_text,
+                                guint                           arg_cursor_pos,
+                                guint                           arg_anchor_pos,
+                                gpointer                        user_data)
 {
   GInputMethodEngine *engine = G_INPUT_METHOD_ENGINE (user_data);
-  _GFreedesktopInputMethodEngine *skeleton
-    = _G_FREEDESKTOP_INPUT_METHOD_ENGINE (object);
-  GVariant *parameter
-    = _g_freedesktop_input_method_engine_get_surrounding_text (skeleton);
-  const gchar *text;
-  guint cursor_pos;
-  guint anchor_pos;
 
-  g_variant_get (parameter, "(&suu)", &text, &cursor_pos, &anchor_pos);
   g_signal_emit (engine,
                  g_input_method_engine_signals[ENGINE_SIGNAL_SET_SURROUNDING_TEXT],
-                 0, text, cursor_pos, anchor_pos);
+                 0, arg_text, arg_cursor_pos, arg_anchor_pos);
+  g_dbus_method_invocation_return_value (invocation, NULL);
+  return TRUE;
 }
 
-static void
-on_notify_content_type (GObject    *object,
-                        GParamSpec *pspec,
-                        gpointer    user_data)
+static gboolean
+on_handle_set_content_type (_GFreedesktopInputMethodEngine *object,
+                            GDBusMethodInvocation          *invocation,
+                            guint                           arg_purpose,
+                            guint                           arg_hints,
+                            gpointer                        user_data)
 {
   GInputMethodEngine *engine = G_INPUT_METHOD_ENGINE (user_data);
-  _GFreedesktopInputMethodEngine *skeleton
-    = _G_FREEDESKTOP_INPUT_METHOD_ENGINE (object);
-  GVariant *parameter
-    = _g_freedesktop_input_method_engine_get_content_type (skeleton);
-  GInputMethodPurpose purpose;
-  GInputMethodHints hints;
 
-  g_variant_get (parameter, "(uu)", &purpose, &hints);
   g_signal_emit (engine,
                  g_input_method_engine_signals[ENGINE_SIGNAL_SET_CONTENT_TYPE],
-                 0, purpose, hints);
+                 0, arg_purpose, arg_hints);
+  g_dbus_method_invocation_return_value (invocation, NULL);
+  return TRUE;
 }
 
 static void
@@ -468,11 +462,11 @@ g_input_method_engine_init (GInputMethodEngine *engine)
   g_signal_connect (engine->priv->skeleton, "handle-destroy",
                     G_CALLBACK (on_handle_destroy),
                     engine);
-  g_signal_connect (engine->priv->skeleton, "notify::surrounding-text",
-                    G_CALLBACK (on_notify_surrounding_text),
+  g_signal_connect (engine->priv->skeleton, "handle-set-surrounding-text",
+                    G_CALLBACK (on_handle_set_surrounding_text),
                     engine);
-  g_signal_connect (engine->priv->skeleton, "notify::content-type",
-                    G_CALLBACK (on_notify_content_type),
+  g_signal_connect (engine->priv->skeleton, "handle-set-content-type",
+                    G_CALLBACK (on_handle_set_content_type),
                     engine);
 }
 

@@ -21,6 +21,15 @@
       <arg type='b' name='focused'/>
     </method>
     <method name='Reset'/>
+    <method name='SetSurroundingText'>
+      <arg type='s' name='text' direction='in'/>
+      <arg type='u' name='cursor_pos' direction='in'/>
+      <arg type='u' name='anchor_pos' direction='in'/>
+    </method>
+    <method name='SetContentType'>
+      <arg type='u' name='purpose' direction='in'/>
+      <arg type='u' name='hints' direction='in'/>
+    </method>
     <method name='Destroy'/>
     <signal name='Commit'>
       <arg type='s' name='text'/>
@@ -34,7 +43,5 @@
       <arg type='i' name='offset_from_cursor'/>
       <arg type='u' name='nchars'/>
     </signal>
-    <property name='SurroundingText' type='(suu)' access='write'/>
-    <property name='ContentType' type='(uu)' access='write'/>
   </interface>
 </node>
